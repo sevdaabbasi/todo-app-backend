@@ -6,11 +6,10 @@ namespace TodoApp.Core.Entities
         public string Username { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string PasswordHash { get; set; }  // Şifreyi hash'lemek için
+        public string PasswordHash { get; set; }  
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }  // Yalnızca bir kez kullanılıyor
+        public DateTime BirthDate { get; set; } 
         public string Gender { get; set; }
-        //public string Password { get; set; }
     }
 }

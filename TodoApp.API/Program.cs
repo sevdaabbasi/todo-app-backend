@@ -3,29 +3,19 @@ using TodoApp.Services;
 using TodoApp.Core.Interfaces;
 using TodoApp.Repositories;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure DbContext
-//builder.Services.AddDbContext<AppDbContext>(options =>
-  //  options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
       builder.Services.AddDbContext<AppDbContext>(options =>
           options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-  
 
-// Register repositoriesFconfi
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-// Register services
 builder.Services.AddScoped<IUserService, UserService>();
 
-// Configure authentication (JWT Bearer)
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
@@ -42,7 +32,6 @@ builder.Services.AddAuthentication("Bearer")
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

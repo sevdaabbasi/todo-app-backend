@@ -8,7 +8,8 @@ namespace TodoApp.API.Helpers
 {
     public static class JwtHelper
     {
-        private const string SecretKey = "your_secret_key_here"; // Güçlü bir key kullanın.
+        private const string SecretKey = "your_256_bit_secret_key_here_which_is_random_and_secure!";
+
 
         public static string GenerateToken(User user)
         {
@@ -28,4 +29,6 @@ namespace TodoApp.API.Helpers
             return tokenHandler.WriteToken(token);
         }
     }
+    
 }
+

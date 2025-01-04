@@ -1,25 +1,49 @@
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
 
-namespace TodoApp.Services;
-
-public class UserService : IUserService
+namespace TodoApp.Services
 {
-    private readonly IRepository<User> _userRepository;
-    private IUserService _userServiceImplementation;
-
-    public UserService(IRepository<User> userRepository)
+    public class UserService : IUserService
     {
-        _userRepository = userRepository;
-    }
+        private readonly IRepository<User> _userRepository;
 
-    public async Task AddUserAsync(User user)
-    {
-        await _userRepository.AddAsync(user);
-    }
+        public UserService(IRepository<User> userRepository)
+        {
+            _userRepository = userRepository;
+        }
 
-    public async Task<User> GetUserByEmailAsync(string email)
-    {
-        return (await _userRepository.FindAsync(u => u.Email == email)).FirstOrDefault();
+        public async Task AddUserAsync(User user)
+        {
+            await _userRepository.AddAsync(user);
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return (await _userRepository.FindAsync(u => u.Email == email)).FirstOrDefault();
+        }
+
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _userRepository.GetByIdAsync(id);
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllAsync();
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _userRepository.Update(user);
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user != null)
+            {
+                _userRepository.Delete(user);
+            }
+        }
     }
 }
