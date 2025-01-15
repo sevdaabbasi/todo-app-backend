@@ -1,3 +1,4 @@
+
 public class RegisterRequestDto
 {
     public string Username { get; set; }

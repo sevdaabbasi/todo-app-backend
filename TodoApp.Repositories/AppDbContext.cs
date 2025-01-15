@@ -6,6 +6,8 @@ namespace TodoApp.Repositories
     public class AppDbContext: DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Todo>Todos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
