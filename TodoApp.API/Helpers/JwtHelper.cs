@@ -3,18 +3,24 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using TodoApp.Core.Entities;
+using Microsoft.Extensions.Options;
+using TodoApp.Core.Settings;
 
 namespace TodoApp.API.Helpers
 {
-    public static class JwtHelper
+    public class JwtHelper
     {
-        private const string SecretKey = "your_256_bit_secret_key_here_which_is_random_and_secure!";
+        private readonly JwtSettings _jwtSettings;
 
+        public JwtHelper(IOptions<JwtSettings> jwtSettings)
+        {
+            _jwtSettings = jwtSettings.Value;
+        }
 
-        public static string GenerateToken(User user)
+        public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(SecretKey);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -22,13 +28,14 @@ namespace TodoApp.API.Helpers
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddDays(_jwtSettings.ExpirationInDays),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key), 
+                    SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
     }
-    
 }
 
