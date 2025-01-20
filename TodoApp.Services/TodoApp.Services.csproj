@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TodoApp.Core\TodoApp.Core.csproj" />
+      <ProjectReference Include="..\TodoApp.Repositories\TodoApp.Repositories.csproj" />
     </ItemGroup>
 
 </Project>

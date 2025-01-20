@@ -40,6 +40,25 @@
       "Microsoft.EntityFrameworkCore.Analyzers/9.0.0": {
         "type": "package"
       },
+      "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.0",
+          "Microsoft.Extensions.Caching.Memory": "9.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0",
+          "Microsoft.Extensions.Logging": "9.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/9.0.0": {
         "type": "package",
         "dependencies": {
@@ -75,6 +94,25 @@
         },
         "runtime": {
           "lib/net8.0/Microsoft.Extensions.Caching.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
             "related": ".xml"
           }
         },
@@ -194,6 +232,40 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "Npgsql/9.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2"
+        },
+        "compile": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Npgsql.EntityFrameworkCore.PostgreSQL/9.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "[9.0.0, 10.0.0)",
+          "Microsoft.EntityFrameworkCore.Relational": "[9.0.0, 10.0.0)",
+          "Npgsql": "9.0.2"
+        },
+        "compile": {
+          "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Diagnostics.DiagnosticSource/9.0.0": {
         "type": "package",
         "compile": {
@@ -228,6 +300,21 @@
         },
         "runtime": {
           "bin/placeholder/TodoApp.Core.dll": {}
+        }
+      },
+      "TodoApp.Repositories/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.0",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2",
+          "TodoApp.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TodoApp.Repositories.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TodoApp.Repositories.dll": {}
         }
       }
     }
@@ -276,6 +363,21 @@
         "docs/PACKAGE.md",
         "microsoft.entityframeworkcore.analyzers.9.0.0.nupkg.sha512",
         "microsoft.entityframeworkcore.analyzers.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
+      "sha512": "j+msw6fWgAE9M3Q/5B9Uhv7pdAdAQUvFPJAiBJmoy+OXvehVbfbCE8ftMAa51Uo2ZeiqVnHShhnv4Y4UJJmUzA==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.relational/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.Relational.xml",
+        "microsoft.entityframeworkcore.relational.9.0.0.nupkg.sha512",
+        "microsoft.entityframeworkcore.relational.nuspec"
       ]
     },
     "Microsoft.Extensions.Caching.Abstractions/9.0.0": {
@@ -331,6 +433,34 @@
         "lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.xml",
         "microsoft.extensions.caching.memory.9.0.0.nupkg.sha512",
         "microsoft.extensions.caching.memory.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/9.0.0": {
+      "sha512": "lqvd7W3FGKUO1+ZoUEMaZ5XDJeWvjpy2/M/ptCGz3tXLD4HWVaSzjufsAsjemasBEg+2SxXVtYVvGt5r2nKDlg==",
+      "type": "package",
+      "path": "microsoft.extensions.configuration.abstractions/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Extensions.Configuration.Abstractions.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Configuration.Abstractions.targets",
+        "lib/net462/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net462/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/net9.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.xml",
+        "microsoft.extensions.configuration.abstractions.9.0.0.nupkg.sha512",
+        "microsoft.extensions.configuration.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -568,6 +698,38 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Npgsql/9.0.2": {
+      "sha512": "hCbO8box7i/XXiTFqCJ3GoowyLqx3JXxyrbOJ6om7dr+eAknvBNhhUHeJVGAQo44sySZTfdVffp4BrtPeLZOAA==",
+      "type": "package",
+      "path": "npgsql/9.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Npgsql.dll",
+        "lib/net6.0/Npgsql.xml",
+        "lib/net8.0/Npgsql.dll",
+        "lib/net8.0/Npgsql.xml",
+        "npgsql.9.0.2.nupkg.sha512",
+        "npgsql.nuspec",
+        "postgresql.png"
+      ]
+    },
+    "Npgsql.EntityFrameworkCore.PostgreSQL/9.0.2": {
+      "sha512": "cYdOGplIvr9KgsG8nJ8xnzBTImeircbgetlzS1OmepS5dAQW6PuGpVrLOKBNEwEvGYZPsV8037X5vZ/Dmpwz7Q==",
+      "type": "package",
+      "path": "npgsql.entityframeworkcore.postgresql/9.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll",
+        "lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.xml",
+        "npgsql.entityframeworkcore.postgresql.9.0.2.nupkg.sha512",
+        "npgsql.entityframeworkcore.postgresql.nuspec",
+        "postgresql.png"
+      ]
+    },
     "System.Diagnostics.DiagnosticSource/9.0.0": {
       "sha512": "ddppcFpnbohLWdYKr/ZeLZHmmI+DXFgZ3Snq+/E7SwcdW4UnvxmaugkwGywvGVWkHPGCSZjCP+MLzu23AL5SDw==",
       "type": "package",
@@ -604,11 +766,17 @@
       "type": "project",
       "path": "../TodoApp.Core/TodoApp.Core.csproj",
       "msbuildProject": "../TodoApp.Core/TodoApp.Core.csproj"
+    },
+    "TodoApp.Repositories/1.0.0": {
+      "type": "project",
+      "path": "../TodoApp.Repositories/TodoApp.Repositories.csproj",
+      "msbuildProject": "../TodoApp.Repositories/TodoApp.Repositories.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "TodoApp.Core >= 1.0.0"
+      "TodoApp.Core >= 1.0.0",
+      "TodoApp.Repositories >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -638,6 +806,9 @@
           "projectReferences": {
             "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj": {
               "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj"
+            },
+            "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Repositories/TodoApp.Repositories.csproj": {
+              "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Repositories/TodoApp.Repositories.csproj"
             }
           }
         }
