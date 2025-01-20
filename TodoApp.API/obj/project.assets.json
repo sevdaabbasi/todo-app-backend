@@ -1737,8 +1737,7 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2",
-          "TodoApp.Core": "1.0.0",
-          "TodoApp.Services": "1.0.0"
+          "TodoApp.Core": "1.0.0"
         },
         "compile": {
           "bin/placeholder/TodoApp.Repositories.dll": {}
@@ -1751,7 +1750,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "TodoApp.Core": "1.0.0"
+          "TodoApp.Core": "1.0.0",
+          "TodoApp.Repositories": "1.0.0"
         },
         "compile": {
           "bin/placeholder/TodoApp.Services.dll": {}

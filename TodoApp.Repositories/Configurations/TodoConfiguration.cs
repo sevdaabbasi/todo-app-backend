@@ -19,20 +19,29 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
         builder.Property(x => x.Description)
             .IsRequired()
             .HasMaxLength(1000);
+        builder.Property(x => x.DueDate)
+            .IsRequired();
+        builder.Property(x => x.Priority)
+            .IsRequired();
         builder.Property(x => x.IsCompleted)
             .IsRequired()
             .HasDefaultValue(false);
 
         // Relationships
         builder.HasOne(x => x.Category)
-            .WithMany(x => x.Todos) 
+            .WithMany(x => x.Todos)
             .HasForeignKey(x => x.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict); // İlişkiyi kısıtlamak için.
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.User)
-            .WithMany(x => x.Todos) 
+            .WithMany(x => x.Todos)
             .HasForeignKey(x => x.UserId)
-            .OnDelete(DeleteBehavior.Cascade); // Kullanıcı silindiğinde ilgili Todos silinsin.
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(x => x.Plan)
+            .WithMany(x => x.Todos)
+            .HasForeignKey(x => x.PlanId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Table Mapping (Optional)
         builder.ToTable("Todos");

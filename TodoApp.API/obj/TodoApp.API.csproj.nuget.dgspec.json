@@ -204,9 +204,6 @@
             "projectReferences": {
               "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj": {
                 "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj"
-              },
-              "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Services/TodoApp.Services.csproj": {
-                "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Services/TodoApp.Services.csproj"
               }
             }
           }
@@ -235,12 +232,6 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
@@ -291,6 +282,9 @@
             "projectReferences": {
               "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj": {
                 "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Core/TodoApp.Core.csproj"
+              },
+              "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Repositories/TodoApp.Repositories.csproj": {
+                "projectPath": "/Users/sevdaabbasi/RiderProjects/TodoApp/TodoApp.Repositories/TodoApp.Repositories.csproj"
               }
             }
           }

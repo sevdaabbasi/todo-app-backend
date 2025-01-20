@@ -11,10 +11,14 @@ namespace TodoApp.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly JwtHelper _jwtHelper;
 
-        public AuthController(IUserService userService)
+        public AuthController(
+            IUserService userService,
+            JwtHelper jwtHelper)
         {
             _userService = userService;
+            _jwtHelper = jwtHelper;
         }
 
         [HttpPost("signup")]
@@ -44,12 +48,9 @@ namespace TodoApp.API.Controllers
         {
             var user = await _userService.GetUserByEmailAsync(loginDto.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
-                return Unauthorized(new { Message = "Invalid credentials" });
+                return Unauthorized(new { Message = "Invalid email or password!" });
 
-            // Token üretimi
-            var token = JwtHelper.GenerateToken(user);
-    
-            // Token ile başarılı yanıt dönme
+            var token = _jwtHelper.GenerateToken(user);
             return Ok(new { Token = token });
         }
 

@@ -12,6 +12,12 @@ namespace TodoApp.Core.Entities
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; } 
         public string Gender { get; set; }
+        public string? AIPreferences { get; set; }
+        public string? DailyRoutine { get; set; }
         public ICollection<Todo> Todos { get; set; }
+        public ICollection<Plan> Plans { get; set; }
+        public ICollection<TodoCollaborator> CollaborativeTodos { get; set; }
+        public ICollection<PlanCollaborator> CollaborativePlans { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 }
