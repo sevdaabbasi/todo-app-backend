@@ -22,10 +22,10 @@ public class ExceptionHandlerMiddleware
         {
             await _next(context);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            _logger.LogError(ex, "An error occurred.");
-            await HandleExceptionAsync(context, ex);
+            _logger.LogError(exception, "An error occurred");
+            await HandleExceptionAsync(context, exception);
         }
     }
 
@@ -35,10 +35,11 @@ public class ExceptionHandlerMiddleware
 
         context.Response.StatusCode = exception switch
         {
-            ValidationException => (int)HttpStatusCode.BadRequest,
-            NotFoundException => (int)HttpStatusCode.NotFound,
-            BusinessException => (int)HttpStatusCode.UnprocessableEntity,
-            _ => (int)HttpStatusCode.InternalServerError
+            ValidationException => StatusCodes.Status400BadRequest,
+            NotFoundException => StatusCodes.Status404NotFound,
+            BusinessException => StatusCodes.Status422UnprocessableEntity,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            _ => StatusCodes.Status500InternalServerError
         };
 
         var response = new
@@ -46,7 +47,8 @@ public class ExceptionHandlerMiddleware
             error = new
             {
                 message = exception.Message,
-                type = exception.GetType().Name
+                type = exception.GetType().Name,
+                details = exception.InnerException?.Message
             }
         };
 

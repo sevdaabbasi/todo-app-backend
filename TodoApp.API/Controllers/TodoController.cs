@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
+using TodoApp.Core.DTOs.Todo;
+using Microsoft.Extensions.Logging;
+using TodoApp.Core.Exceptions;
 
 namespace TodoApp.API.Controllers;
 
@@ -11,10 +14,12 @@ namespace TodoApp.API.Controllers;
 public class TodoController : ControllerBase
 {
     private readonly ITodoService _todoService;
+    private readonly ILogger<TodoController> _logger;
 
-    public TodoController(ITodoService todoService)
+    public TodoController(ITodoService todoService, ILogger<TodoController> logger)
     {
         _todoService = todoService;
+        _logger = logger;
     }
 
     private async Task ValidateUserAccessToTodoAsync(int todoId, int userId)
@@ -27,13 +32,31 @@ public class TodoController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTodo([FromBody] Todo todo)
+    public async Task<IActionResult> CreateTodo([FromBody] CreateTodoDto dto)
     {
-        var userId = int.Parse(User.Identity?.Name ?? "0");
-        todo.UserId = userId;
-        
-        var createdTodo = await _todoService.CreateTodoAsync(todo);
-        return CreatedAtAction(nameof(GetTodoById), new { id = createdTodo.Id }, createdTodo);
+        try 
+        {
+            var todo = new Todo
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                DueDate = dto.DueDate,
+                Priority = dto.Priority,
+                RecurrenceType = dto.RecurrenceType,
+                CategoryId = dto.CategoryId,
+                PlanId = dto.PlanId,
+                UserId = int.Parse(User.Identity?.Name ?? "0"),
+                IsCompleted = false
+            };
+            
+            var createdTodo = await _todoService.CreateTodoAsync(todo);
+            return CreatedAtAction(nameof(GetTodoById), new { id = createdTodo.Id }, createdTodo);
+        }
+        catch (BusinessException ex)
+        {
+            _logger.LogError(ex, "Error creating todo: {Message}", ex.Message);
+            throw;
+        }
     }
 
     [HttpGet("{id}")]

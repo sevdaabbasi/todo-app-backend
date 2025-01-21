@@ -1,49 +1,62 @@
 using TodoApp.Core.Entities;
+using TodoApp.Core.Exceptions;
 using TodoApp.Core.Interfaces;
+
 
 namespace TodoApp.Services
 {
-    public class CategoryService : IUserService
+    public class CategoryService : ICategoryService
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<Category> _categoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private ICategoryService _categoryServiceImplementation;
 
-        public CategoryService(IRepository<User> userRepository)
+        public CategoryService(IRepository<Category> categoryRepository, IUnitOfWork unitOfWork)
         {
-            _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
-            await _userRepository.AddAsync(user);
+            await _categoryRepository.AddAsync(category);
+            await _unitOfWork.CommitAsync();
+            return category;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
+        public async Task<Category> GetByIdAsync(int id)
         {
-            return (await _userRepository.FindAsync(u => u.Email == email)).FirstOrDefault();
+            var category = await _categoryRepository.GetByIdAsync(id);
+            if (category == null)
+                throw new NotFoundException($"Category with id {id} was not found");
+            return category;
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<IEnumerable<Category>> GetUserCategoriesAsync(int userId)
         {
-            return await _userRepository.GetByIdAsync(id);
+            return await _categoryRepository.FindAsync(c => c.UserId == userId);
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task UpdateCategoryAsync(Category category)
         {
-            return await _userRepository.GetAllAsync();
+            var existingCategory = await GetByIdAsync(category.Id);
+            if (existingCategory.UserId != category.UserId)
+                throw new UnauthorizedAccessException("You can only update your own categories");
+
+            _categoryRepository.Update(category);
+            await _unitOfWork.CommitAsync();
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task DeleteCategoryAsync(int id)
         {
-            _userRepository.Update(user);
+            var category = await GetByIdAsync(id);
+            _categoryRepository.Delete(category);
+            await _unitOfWork.CommitAsync();
         }
 
-        public async Task DeleteUserAsync(int id)
+        public Task<IEnumerable<Todo>> GetTodosByCategoryAsync(int categoryId)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user != null)
-            {
-                _userRepository.Delete(user);
-            }
+            return _categoryServiceImplementation.GetTodosByCategoryAsync(categoryId);
         }
     }
 }

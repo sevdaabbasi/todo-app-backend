@@ -12,10 +12,16 @@ using TodoApp.API.Middleware;
 using Microsoft.Extensions.Configuration;
 using TodoApp.Core.Settings;
 using TodoApp.API.Helpers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 // Swagger konfigürasyonunu güncelle
@@ -69,6 +75,7 @@ builder.Services.AddScoped<ITodoService, TodoService>();
 builder.Services.AddScoped<IPlanService, PlanService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ICollaborationService, CollaborationService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

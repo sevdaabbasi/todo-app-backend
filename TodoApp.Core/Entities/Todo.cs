@@ -19,7 +19,7 @@ public class Todo : BaseEntity
     public Category Category { get; set; }
     
     public int? PlanId { get; set; }
-    public Plan? Plan { get; set; }
+    public Plan Plan { get; set; }
     
     public ICollection<TodoCollaborator> Collaborators { get; set; }
     public ICollection<Notification> Notifications { get; set; }

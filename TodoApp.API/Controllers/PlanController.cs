@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
+using TodoApp.Core.DTOs.Plan;
 
 namespace TodoApp.API.Controllers;
 
@@ -18,10 +19,17 @@ public class PlanController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePlan([FromBody] Plan plan)
+    public async Task<IActionResult> CreatePlan([FromBody] CreatePlanDto dto)
     {
-        var userId = int.Parse(User.Identity?.Name ?? "0");
-        plan.UserId = userId;
+        var plan = new Plan
+        {
+            Title = dto.Title,
+            Description = dto.Description,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate,
+            PlanType = dto.PlanType,
+            UserId = int.Parse(User.Identity?.Name ?? "0")
+        };
         
         var createdPlan = await _planService.CreatePlanAsync(plan);
         return CreatedAtAction(nameof(GetPlanById), new { id = createdPlan.Id }, createdPlan);
