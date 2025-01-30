@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
-using TodoApp.Core.DTOs.Todo;
 using Microsoft.Extensions.Logging;
 using TodoApp.Core.Exceptions;
 
