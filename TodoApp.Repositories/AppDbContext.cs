@@ -20,7 +20,7 @@ namespace TodoApp.Repositories
         {
             base.OnModelCreating(modelBuilder);
 
-            // İlişkileri tanımla
+
             modelBuilder.Entity<Todo>()
                 .HasOne(t => t.User)
                 .WithMany(u => u.Todos)
@@ -36,9 +36,10 @@ namespace TodoApp.Repositories
                 .WithMany(p => p.Todos)
                 .HasForeignKey(t => t.PlanId);
 
-            // Diğer ilişkiler...
+        
         }
 
+    
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=123456;Database=postgresqldb");

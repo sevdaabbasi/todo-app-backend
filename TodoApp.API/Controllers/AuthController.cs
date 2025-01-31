@@ -43,6 +43,7 @@ namespace TodoApp.API.Controllers
             return Ok(new { Message = "User registered successfully!" });
         }
 
+
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] LoginRequestDto loginDto)
         {
@@ -54,7 +55,7 @@ namespace TodoApp.API.Controllers
             return Ok(new { Token = token });
         }
 
-        // Get a user by ID
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -65,7 +66,7 @@ namespace TodoApp.API.Controllers
             return Ok(user);
         }
 
-        // Get all users
+
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
