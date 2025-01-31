@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
 using Microsoft.Extensions.Logging;
+using TodoApp.Core.DTOs.Todo;
 using TodoApp.Core.Exceptions;
 
 namespace TodoApp.API.Controllers;
