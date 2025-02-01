@@ -39,12 +39,15 @@ namespace TodoApp.Services
 
         public async Task UpdateCategoryAsync(Category category)
         {
-            var existingCategory = await GetByIdAsync(category.Id);
-            if (existingCategory.UserId != category.UserId)
-                throw new UnauthorizedAccessException("You can only update your own categories");
-
-            _categoryRepository.Update(category);
-            await _unitOfWork.CommitAsync();
+            try
+            {
+                _categoryRepository.Update(category);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessException("Failed to update category", ex);
+            }
         }
 
         public async Task DeleteCategoryAsync(int id)

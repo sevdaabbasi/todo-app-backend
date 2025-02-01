@@ -8,11 +8,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        // Primary Key
+    
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).UseIdentityColumn();
 
-        // Properties Configuration
+     
         builder.Property(x => x.Username)
             .IsRequired()
             .HasMaxLength(100);
@@ -42,13 +42,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(10);
 
-        // Relationships Configuration
+   
         builder.HasMany(x => x.Todos)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Table Mapping
+  
         builder.ToTable("Users");
     }
 }

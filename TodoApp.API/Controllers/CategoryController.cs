@@ -51,17 +51,27 @@ public class CategoryController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCategory(int id, [FromBody] CreateCategoryDto dto)
     {
-        var category = new Category
+        try 
         {
-            Id = id,
-            Name = dto.Name,
-            Description = dto.Description,
-            Color = dto.Color,
-            UserId = int.Parse(User.Identity?.Name ?? "0")
-        };
+         
+            var existingCategory = await _categoryService.GetByIdAsync(id);
+            if (existingCategory == null)
+                return NotFound();
 
-        await _categoryService.UpdateCategoryAsync(category);
-        return NoContent();
+            
+            existingCategory.Name = dto.Name;
+            existingCategory.Description = dto.Description;
+            existingCategory.Color = dto.Color;
+            
+          
+            await _categoryService.UpdateCategoryAsync(existingCategory);
+            
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpDelete("{id}")]

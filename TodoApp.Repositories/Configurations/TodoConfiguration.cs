@@ -8,10 +8,10 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
 {
     public void Configure(EntityTypeBuilder<Todo> builder)
     {
-        // Primary Key
+    
         builder.HasKey(x => x.Id);
 
-        // Properties
+        
         builder.Property(x => x.Id).UseIdentityColumn();
         builder.Property(x => x.Title)
             .IsRequired()
@@ -27,7 +27,7 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
             .IsRequired()
             .HasDefaultValue(false);
 
-        // Relationships
+        
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Todos)
             .HasForeignKey(x => x.CategoryId)
@@ -43,7 +43,7 @@ public class TodoConfiguration : IEntityTypeConfiguration<Todo>
             .HasForeignKey(x => x.PlanId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Table Mapping (Optional)
+      
         builder.ToTable("Todos");
     }
 }

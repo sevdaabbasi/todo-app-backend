@@ -36,6 +36,8 @@ public class TodoController : ControllerBase
     {
         try 
         {
+            var userId = int.Parse(User.Identity?.Name ?? "0");
+            
             var todo = new Todo
             {
                 Title = dto.Title,
@@ -45,17 +47,25 @@ public class TodoController : ControllerBase
                 RecurrenceType = dto.RecurrenceType,
                 CategoryId = dto.CategoryId,
                 PlanId = dto.PlanId,
-                UserId = int.Parse(User.Identity?.Name ?? "0"),
-                IsCompleted = false
+                UserId = userId
             };
             
             var createdTodo = await _todoService.CreateTodoAsync(todo);
             return CreatedAtAction(nameof(GetTodoById), new { id = createdTodo.Id }, createdTodo);
         }
+        catch (ValidationException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
+        }
         catch (BusinessException ex)
         {
-            _logger.LogError(ex, "Error creating todo: {Message}", ex.Message);
-            throw;
+            return UnprocessableEntity(new { 
+                error = new { 
+                    message = ex.Message,
+                    type = ex.GetType().Name,
+                    details = ex.InnerException?.Message 
+                }
+            });
         }
     }
 
@@ -93,13 +103,45 @@ public class TodoController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTodo(int id, [FromBody] Todo todo)
+    public async Task<IActionResult> UpdateTodo(int id, [FromBody] UpdateTodoDto dto)
     {
-        if (id != todo.Id)
-            return BadRequest();
+        try 
+        {
+            var userId = int.Parse(User.Identity?.Name ?? "0");
+            
+            var existingTodo = await _todoService.GetTodoByIdAsync(id);
+            if (existingTodo == null)
+                return NotFound();
+            
+            if (existingTodo.UserId != userId)
+                return Unauthorized();
 
-        await _todoService.UpdateTodoAsync(todo);
-        return NoContent();
+            // Mevcut todo'yu güncelle
+            existingTodo.Title = dto.Title;
+            existingTodo.Description = dto.Description;
+            existingTodo.DueDate = dto.DueDate;
+            existingTodo.Priority = dto.Priority;
+            existingTodo.RecurrenceType = dto.RecurrenceType;
+            existingTodo.CategoryId = dto.CategoryId;
+            existingTodo.PlanId = dto.PlanId;
+
+            await _todoService.UpdateTodoAsync(existingTodo);
+            return NoContent();
+        }
+        catch (ValidationException ex)
+        {
+            return UnprocessableEntity(new { message = ex.Message });
+        }
+        catch (BusinessException ex)
+        {
+            return UnprocessableEntity(new { 
+                error = new { 
+                    message = ex.Message,
+                    type = ex.GetType().Name,
+                    details = ex.InnerException?.Message 
+                }
+            });
+        }
     }
 
     [HttpDelete("{id}")]

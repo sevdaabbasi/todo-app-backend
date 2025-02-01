@@ -15,7 +15,7 @@ public class PlanCollaboratorConfiguration : IEntityTypeConfiguration<PlanCollab
             .IsRequired()
             .HasDefaultValue(false);
 
-        // Relationships
+   
         builder.HasOne(x => x.User)
             .WithMany(x => x.CollaborativePlans)
             .HasForeignKey(x => x.UserId)

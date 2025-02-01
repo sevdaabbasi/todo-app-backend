@@ -16,4 +16,11 @@ public class PlanRepository : EfRepository<Plan>
                        x.EndDate >= DateTime.UtcNow)
             .ToListAsync();
     }
+
+    public async Task<Plan> GetByIdAsync(int id)
+    {
+        return await _context.Plans
+            .Include(p => p.Collaborators)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
 } 

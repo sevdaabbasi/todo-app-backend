@@ -74,7 +74,7 @@ namespace TodoApp.API.Controllers
             return Ok(users);
         }
 
-        // Update a user
+  
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] RegisterRequestDto updateDto)
         {
@@ -94,7 +94,7 @@ namespace TodoApp.API.Controllers
             return Ok(new { Message = "User updated successfully!" });
         }
 
-        // Delete a user
+    
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

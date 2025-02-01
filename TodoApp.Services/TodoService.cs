@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
 using TodoApp.Core.Exceptions;
+using TodoApp.Repositories;
 using TodoApp.Repositories.Repositories;
 
 namespace TodoApp.Services;
@@ -11,15 +12,18 @@ public class TodoService : ITodoService
     private readonly TodoRepository _todoRepository;
     private readonly INotificationService _notificationService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly AppDbContext _context;
 
     public TodoService(
         TodoRepository todoRepository,
         INotificationService notificationService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        AppDbContext context)
     {
         _todoRepository = todoRepository;
         _notificationService = notificationService;
         _unitOfWork = unitOfWork;
+        _context = context;
     }
 
     public async Task<Todo> CreateTodoAsync(Todo todo)
@@ -84,6 +88,10 @@ public class TodoService : ITodoService
         }
     }
 
+  
+
+     
+    
     public async Task UpdateTodoAsync(Todo todo)
     {
         try
@@ -100,10 +108,6 @@ public class TodoService : ITodoService
 
             _todoRepository.Update(todo);
             await _unitOfWork.CommitAsync();
-        }
-        catch (NotFoundException)
-        {
-            throw;
         }
         catch (Exception ex)
         {
@@ -215,27 +219,25 @@ public class TodoService : ITodoService
             throw new ValidationException("Due date cannot be in the past.");
         }
 
-        // Kategori kontrolü
         if (todo.CategoryId > 0)
         {
-            var categoryExists = await _todoRepository
-                .AnyAsync(x => x.CategoryId == todo.CategoryId);
+            var categoryExists = await _context.Categories
+                .AnyAsync(x => x.Id == todo.CategoryId && x.UserId == todo.UserId);
                 
             if (!categoryExists)
             {
-                throw new ValidationException("Invalid category.");
+                throw new ValidationException("Invalid category or you don't have access to this category.");
             }
         }
 
-        // Plan kontrolü
         if (todo.PlanId.HasValue)
         {
-            var planExists = await _todoRepository
-                .AnyAsync(x => x.PlanId == todo.PlanId);
+            var planExists = await _context.Plans
+                .AnyAsync(x => x.Id == todo.PlanId && x.UserId == todo.UserId);
                 
             if (!planExists)
             {
-                throw new ValidationException("Invalid plan.");
+                throw new ValidationException("Invalid plan or you don't have access to this plan.");
             }
         }
     }

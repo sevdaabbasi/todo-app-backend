@@ -2,7 +2,10 @@ using TodoApp.Core.Entities;
 using TodoApp.Core.Interfaces;
 using TodoApp.Repositories.Repositories;
 using System;
-using System.ComponentModel.DataAnnotations;
+using TodoApp.Core.Exceptions;
+using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TodoApp.Services;
 
@@ -41,8 +44,16 @@ public class PlanService : IPlanService
 
     public async Task UpdatePlanAsync(Plan plan)
     {
-        _planRepository.Update(plan);
-        await _unitOfWork.CommitAsync();
+        try
+        {
+            await ValidatePlanAsync(plan);
+            _planRepository.Update(plan);
+            await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new BusinessException("Failed to update plan", ex);
+        }
     }
 
     public async Task DeletePlanAsync(int id)
@@ -57,17 +68,33 @@ public class PlanService : IPlanService
 
     public async Task AddCollaboratorAsync(int planId, int userId)
     {
-        var plan = await _planRepository.GetByIdAsync(planId);
-        if (plan != null)
+        try 
         {
+            var plan = await _planRepository.GetByIdAsync(planId);
+            if (plan == null)
+                throw new NotFoundException($"Plan with id {planId} not found");
+
+            // Collaborators koleksiyonu null ise yeni liste oluştur
+            if (plan.Collaborators == null)
+                plan.Collaborators = new List<PlanCollaborator>();
+
+            // Eğer kullanıcı zaten collaborator ise ekleme
+            if (plan.Collaborators.Any(c => c.UserId == userId))
+                throw new BusinessException("User is already a collaborator");
+
             var collaborator = new PlanCollaborator
             {
                 PlanId = planId,
                 UserId = userId,
                 IsAccepted = false
             };
+
             plan.Collaborators.Add(collaborator);
             await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new BusinessException("Failed to add collaborator", ex);
         }
     }
 

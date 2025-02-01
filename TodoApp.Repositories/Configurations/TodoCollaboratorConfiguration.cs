@@ -15,7 +15,7 @@ public class TodoCollaboratorConfiguration : IEntityTypeConfiguration<TodoCollab
             .IsRequired()
             .HasDefaultValue(false);
 
-        // Relationships
+     
         builder.HasOne(x => x.User)
             .WithMany(x => x.CollaborativeTodos)
             .HasForeignKey(x => x.UserId)

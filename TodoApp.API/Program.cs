@@ -57,7 +57,9 @@ builder.Services.AddSwaggerGen(c =>
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .EnableSensitiveDataLogging()
+);
 
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -105,6 +107,8 @@ builder.Services.AddAuthentication(options =>
             Encoding.ASCII.GetBytes(jwtSettings.GetValue<string>("SecretKey")))
     };
 });
+
+builder.Services.AddScoped<AppDbContext>();
 
 var app = builder.Build();
 

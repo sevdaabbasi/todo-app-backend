@@ -27,7 +27,7 @@ public class PlanConfiguration : IEntityTypeConfiguration<Plan>
         builder.Property(x => x.PlanType)
             .IsRequired();
 
-        // Relationships
+     
         builder.HasOne(x => x.User)
             .WithMany(x => x.Plans)
             .HasForeignKey(x => x.UserId)
